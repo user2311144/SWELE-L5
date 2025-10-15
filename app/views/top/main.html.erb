@@ -1,0 +1,69 @@
+<%# ---------------- ログインしている場合の表示 ---------------- %>
+<% if session[:login_uid] %>
+  
+  <h1>ツイート一覧</h1>
+  <p>ようこそ、<%= session[:login_uid] %>さん！</p>
+    <%= link_to 'ログアウト', top_logout_path, data: { turbo_method: :get } %>
+    <%= link_to 'ユーザー管理', users_path %>
+
+  <hr>
+
+  <%# --- ツイート投稿フォーム --- %>
+  <h2>新しいツイートを投稿する</h2>
+  <%= form_with(url: tweets_path, method: :post) do |form| %>
+    <div>
+      <%= form.text_area :message, size: "60x5" %>
+    </div>
+    <div>
+      <%= form.submit '投稿' %>
+    </div>
+  <% end %>
+
+  <hr>
+
+  <%# --- ツイート一覧表示 --- %>
+  <%# ログインしているユーザー情報を取得 %>
+  <% user = User.find_by(uid: session[:login_uid]) %>
+  
+  <% @tweets.each do |tweet| %>
+    <p>
+      <strong><%= tweet.user.uid %>:</strong> <%= tweet.message %>
+
+      <%# --- いいね/いいね削除ボタンの出し分け --- %>
+      <%# もし、ログイン中のユーザーがいいねしたツイートに、このツイートが含まれていたら %>
+      <% if user.like_tweets.include?(tweet) %>
+        <%# 「いいね削除」のリンクを表示 %>
+        <%= link_to 'いいね削除', like_path(tweet), data: { turbo_method: :delete } %>
+      <% else %>
+        <%# そうでなければ「いいね」のリンクを表示 %>
+        <%= link_to 'いいね', likes_path(tweet_id: tweet.id), data: { turbo_method: :post } %>
+      <% end %>
+      <% if tweet.user == user %>
+       <%= link_to '削除', tweet_path(tweet), data: { turbo_method: :delete, turbo_confirm: '本当に削除しますか？' } %>
+      <% end %>
+    </p>
+  <% end %>
+
+
+<%# ---------------- ログインしていない場合の表示 ---------------- %>
+<% else %>
+
+  <h1>ログイン</h1>
+  
+  <%# --- ログインフォーム --- %>
+  <%= form_tag('/top/login', method: :post) do %>
+    <%# エラーメッセージがある場合に表示 %>
+    <% if flash[:alert] %>
+      <p style="color: red;"><%= flash[:alert] %></p>
+    <% end %>
+  
+    <p>
+      ユーザーID: <%= text_field_tag 'uid' %>
+    </p>
+    <p>
+      パスワード: <%= password_field_tag 'pass' %>
+    </p>
+    <%= submit_tag 'ログイン' %>
+  <% end %>
+
+<% end %>

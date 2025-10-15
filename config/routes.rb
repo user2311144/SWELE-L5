@@ -1,8 +1,13 @@
 Rails.application.routes.draw do
+  get "likes/create"
+  get "likes/destroy"
+  post "top/login"
+  get "top/logout"
   resources :users
-  root "users#index"
-  get "users/index"
-  get "users/new"
+  resources :tweets
+  root 'top#main'
+  resources :likes, only: [:create, :destroy]
+  #root "tweets#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
