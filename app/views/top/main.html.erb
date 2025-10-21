@@ -5,7 +5,7 @@
   <p>ようこそ、<%= session[:login_uid] %>さん！</p>
     <%= link_to 'ログアウト', top_logout_path, data: { turbo_method: :get } %>
     <%= link_to 'ユーザー管理', users_path %>
-
+    <%= link_to 'プロフィール編集', edit_profile_path %>
   <hr>
 
   <%# --- ツイート投稿フォーム --- %>
@@ -27,10 +27,11 @@
   
   <% @tweets.each do |tweet| %>
     <p>
-      <strong><%= tweet.user.uid %>:</strong> <%= tweet.message %>
+      <strong><%= tweet.user.uid %>:</strong> <%= tweet.message %><br>
+      <%# ↓ ここから追加: もしプロフィールが存在すれば表示する %>
+      <em style="color: #555;"><%= tweet.user.profile&.message %></em>
 
       <%# --- いいね/いいね削除ボタンの出し分け --- %>
-      <%# もし、ログイン中のユーザーがいいねしたツイートに、このツイートが含まれていたら %>
       <% if user.like_tweets.include?(tweet) %>
         <%# 「いいね削除」のリンクを表示 %>
         <%= link_to 'いいね削除', like_path(tweet), data: { turbo_method: :delete } %>
@@ -38,8 +39,10 @@
         <%# そうでなければ「いいね」のリンクを表示 %>
         <%= link_to 'いいね', likes_path(tweet_id: tweet.id), data: { turbo_method: :post } %>
       <% end %>
+      
+      <%# --- 削除ボタンの表示 --- %>
       <% if tweet.user == user %>
-       <%= link_to '削除', tweet_path(tweet), data: { turbo_method: :delete, turbo_confirm: '本当に削除しますか？' } %>
+        <%= link_to '削除', tweet_path(tweet), data: { turbo_method: :delete, turbo_confirm: '本当に削除しますか？' } %>
       <% end %>
     </p>
   <% end %>

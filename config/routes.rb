@@ -1,10 +1,15 @@
 Rails.application.routes.draw do
+  get "profiles/edit"
+  get "profiles/update"
   get "likes/create"
   get "likes/destroy"
   post "top/login"
   get "top/logout"
   resources :users
   resources :tweets
+  
+  resource :profile, only: [:edit, :update]
+  
   root 'top#main'
   resources :likes, only: [:create, :destroy]
   #root "tweets#index"
