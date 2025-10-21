@@ -5,7 +5,15 @@ gem "rails", "~> 8.0.3"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use sqlite3 as the database for Active Record
-gem "sqlite3", ">= 2.1"
+# 開発環境とテスト環境でのみsqlite3を使用
+group :development, :test do
+  gem "sqlite3", "2.7.4"
+end
+
+# 本番環境でのみpostgresql(pg gem)を使用
+group :production do
+  gem "pg"
+end
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
