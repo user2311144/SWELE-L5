@@ -8,7 +8,7 @@ class TweetsController < ApplicationController
   end
   def create
     # ログインしているユーザー情報をsessionから取得する
-    user = User.find_by(uid: session[:login_uid])
+    user = User.find_by(uid: current_user.uid)
 
     # フォームから送られたメッセージと、ログインユーザーのIDでツイートを作成
     Tweet.create(message: params[:message], user_id: user.id)

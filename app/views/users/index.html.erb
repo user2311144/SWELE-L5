@@ -16,6 +16,7 @@
     <% @users.each do |user| %>
       <tr>
         <td><%= user.uid %></td>
+        <td><%=user.password_digest %></td>
         <td><%= link_to '削除', user_path(user), data: { turbo_method: :delete, turbo_confirm: '本当に削除しますか？' } %></td>
       </tr>
     <% end %>

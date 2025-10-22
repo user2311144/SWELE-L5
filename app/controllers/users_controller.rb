@@ -13,7 +13,8 @@ class UsersController < ApplicationController
 
   # 新規登録フォームから送られてきたデータでユーザーを作成する
   def create
-    @user = User.new(user_params)
+    def create
+      @user = User.new(user_params)
     if @user.save
       # 登録に成功したら、ユーザー一覧ページに移動する
       redirect_to users_path, notice: 'ユーザーを登録しました。'
@@ -21,6 +22,7 @@ class UsersController < ApplicationController
       # 失敗したら、再度新規登録ページを表示する
       render :new, status: :unprocessable_entity
     end
+  end
   end
 
   # ユーザーを削除する
