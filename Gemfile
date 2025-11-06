@@ -7,7 +7,7 @@ gem "propshaft"
 # Use sqlite3 as the database for Active Record
 # 開発環境とテスト環境でのみsqlite3を使用
 group :development, :test do
-  gem "sqlite3", "2.7.4"
+  gem "sqlite3", "2.8.0"
 end
 
 # 本番環境でのみpostgresql(pg gem)を使用
